@@ -1,0 +1,21 @@
+{
+  "name": "fitness-backend",
+  "version": "1.0.0",
+  "description": "Fitness coaching platform backend",
+  "main": "bin/www.js",
+  "scripts": {
+    "start": "node ./bin/www.js",
+    "dev": "nodemon ./bin/www.js"
+  },
+  "dependencies": {
+    "express": "^5.0.0",
+    "jsonwebtoken": "^9.0.0",
+    "bcryptjs": "^2.4.3",
+    "uuid": "^9.0.0",
+    "pg": "^8.7.3",
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
