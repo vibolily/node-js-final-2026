@@ -6,9 +6,9 @@ async function initializeDatabase() {
   client = new Client({
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 5432,
-    user: process.env.DB_USER || 'postgres',
+    user: process.env.DB_USERNAME || process.env.DB_USER || 'postgres',
     password: process.env.DB_PASSWORD || 'postgres',
-    database: process.env.DB_NAME || 'fitness_db',
+    database: process.env.DB_DATABASE || process.env.DB_NAME || 'fitness_db',
   });
 
   try {
