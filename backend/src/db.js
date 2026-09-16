@@ -117,11 +117,7 @@ async function createTables() {
   ];
 
   for (const query of queries) {
-    try {
-      await client.query(query);
-    } catch (error) {
-      console.error('創建表失敗:', error.message);
-    }
+    await client.query(query);
   }
 }
 

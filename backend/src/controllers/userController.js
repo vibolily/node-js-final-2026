@@ -11,7 +11,7 @@ async function userExists(email) {
 
 async function signup(req, res) {
   try {
-    const { email, password, name, role } = req.body;
+    const { email, password, name } = req.body;
 
     if (!email || !password || !name) {
       return res.status(400).json({
@@ -36,7 +36,7 @@ async function signup(req, res) {
 
     const userId = uuidv4();
     const hashedPassword = hashPassword(password);
-    const userRole = (role || 'USER').toUpperCase();
+    const userRole = 'USER';
 
     const client = db.getClient();
     await client.query(

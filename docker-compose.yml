@@ -52,6 +52,8 @@ services:
   #   - 要有 healthcheck（打你的 GET /healthcheck）
   #   - depends_on postgres 的 healthy
   # ============================================================
+  # 注意：此處直接把 DB 密碼、JWT_SECRET 寫在 compose 裡僅為教學方便；
+  # 實務上這類機密應放在 .env（並加入 .gitignore），再由環境變數引用，不應提交進版控。
   backend:
     build:
       context: ./backend

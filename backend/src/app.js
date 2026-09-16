@@ -33,4 +33,24 @@ app.use('/api/coaches', coachRoutes);
 app.use('/api/credit-package', creditPackageRoutes);
 app.use('/api/courses', courseRoutes);
 
+// ============================================================================
+// 404 與全域錯誤處理
+// ============================================================================
+
+app.use((req, res) => {
+  res.status(404).json({
+    status: 'failed',
+    message: '找不到此路由',
+  });
+});
+
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({
+    status: 'failed',
+    message: '伺服器錯誤',
+  });
+});
+
 module.exports = app;

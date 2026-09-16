@@ -407,13 +407,6 @@ async function getCoachCourses(req, res) {
 
 async function getCourseById(req, res) {
   try {
-    if (req.user.role !== 'COACH') {
-      return res.status(400).json({
-        status: 'failed',
-        message: '不是教練身分',
-      });
-    }
-
     const { courseId } = req.params;
     if (!isValidUUID(courseId)) {
       return res.status(400).json({
@@ -423,7 +416,7 @@ async function getCourseById(req, res) {
     }
 
     const client = db.getClient();
-    const courseRes = await client.query('SELECT * FROM courses WHERE id = $1', [courseId]);
+    const courseRes = await client.query('SELECT * FROM courses WHERE id = $1 AND user_id = $2', [courseId, req.user.id]);
 
     if (courseRes.rows.length === 0) {
       return res.status(400).json({
@@ -433,12 +426,6 @@ async function getCourseById(req, res) {
     }
 
     const course = courseRes.rows[0];
-    if (course.user_id !== req.user.id) {
-      return res.status(400).json({
-        status: 'failed',
-        message: '權限不足',
-      });
-    }
 
     res.json({
       status: 'success',
@@ -464,13 +451,6 @@ async function getCourseById(req, res) {
 
 async function updateCourseById(req, res) {
   try {
-    if (req.user.role !== 'COACH') {
-      return res.status(400).json({
-        status: 'failed',
-        message: '不是教練身分',
-      });
-    }
-
     const { courseId } = req.params;
     if (!isValidUUID(courseId)) {
       return res.status(400).json({
@@ -480,20 +460,12 @@ async function updateCourseById(req, res) {
     }
 
     const client = db.getClient();
-    const courseRes = await client.query('SELECT * FROM courses WHERE id = $1', [courseId]);
+    const courseRes = await client.query('SELECT * FROM courses WHERE id = $1 AND user_id = $2', [courseId, req.user.id]);
 
     if (courseRes.rows.length === 0) {
       return res.status(400).json({
         status: 'failed',
         message: '課程不存在',
-      });
-    }
-
-    const course = courseRes.rows[0];
-    if (course.user_id !== req.user.id) {
-      return res.status(400).json({
-        status: 'failed',
-        message: '權限不足',
       });
     }
 
