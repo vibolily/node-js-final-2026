@@ -26,15 +26,15 @@ services:
   postgres:
     image: postgres:16.4-alpine3.20
     environment:
-      - POSTGRES_USER=student
-      - POSTGRES_PASSWORD=student666
-      - POSTGRES_DB=fitness
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
     volumes:
       - pgData:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U student -d fitness"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
       interval: 10s
       timeout: 3s
       retries: 3
@@ -52,8 +52,8 @@ services:
   #   - 要有 healthcheck（打你的 GET /healthcheck）
   #   - depends_on postgres 的 healthy
   # ============================================================
-  # 注意：此處直接把 DB 密碼、JWT_SECRET 寫在 compose 裡僅為教學方便；
-  # 實務上這類機密應放在 .env（並加入 .gitignore），再由環境變數引用，不應提交進版控。
+  # 注意：DB 密碼、JWT_SECRET 改由根目錄 .env（不進版控）透過 ${VAR} 帶入，
+  # 不再直接寫死在 compose 檔中；請先將 .env.example 複製為根目錄 .env 並自行填值。
   backend:
     build:
       context: ./backend
@@ -62,13 +62,13 @@ services:
       - "8080:8080"
     environment:
       - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=student
-      - DB_PASSWORD=student666
-      - DB_NAME=fitness
-      - PORT=8080
-      - JWT_SECRET=your-secret-key
-      - JWT_EXPIRES_DAY=30d
+      - DB_PORT=${DB_PORT}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - PORT=${PORT}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRES_DAY=${JWT_EXPIRES_DAY}
     depends_on:
       postgres:
         condition: service_healthy
